@@ -1,0 +1,79 @@
+---
+output:
+  html_notebook: default
+  html_document: default
+---
+# Recommendation Engine
+
+### Problem Statement :- 
+
+  - Build a recommender system with the given data using UBCF.
+
+### Data Understanding
+
+```{r}
+rating <- read.csv("~/desktop/Digi 360/Module 16/Archive-4/movie.csv")
+head(rating)
+```
+
+### Importing the libraries
+
+```{r}
+library("recommenderlab")
+library(caTools)
+```
+
+```{r}
+#metadata about the variable
+str(rating)
+```
+
+### Data Visualization
+
+```{r}
+#rating distribution
+hist(rating$rating)
+```
+
+
+
+```{r}
+#the datatype should be realRatingMatrix inorder to build recommendation engine
+rating_matrix <- as(rating, 'realRatingMatrix')
+```
+
+```{r}
+rating_matrix
+```
+
+
+### Heatmap of Movie Ratings
+
+```{r}
+image(rating_matrix[1:10, 1:10], axes = FALSE, main = "Heatmap of the first 10 rows and 10 columns")
+```
+
+### Building Model
+
+#### User Based Collaborative Filtering
+
+```{r}
+movie_recomm_model <- Recommender(rating_matrix, method="UBCF")
+```
+
+### Predictions
+
+```{r}
+#Predictions for two users 
+recommended_items <- predict(movie_recomm_model, rating_matrix[1000], n=5)
+as(recommended_items, "list")
+```
+
+### Conclusion:- 
+
+  - For the user 1000, the top recommended movies are:- 
+  
+    "Sabrina (1995)"           
+    "Waiting to Exhale (1995)"
+    "Sudden Death (1995)"      
+    "Tom and Huck (1995)"
